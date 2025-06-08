@@ -72,4 +72,4 @@ pipeline {
     }
 }
 
-// finish to setting smtpConfiguration
+// finish to setting smtpConfiguration: email test2
