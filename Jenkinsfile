@@ -49,12 +49,25 @@ pipeline {
             archiveArtifacts artifacts: 'build/test-results/test/*', allowEmptyArchive: true
         }
 
-        failure {
-            echo "Build or test failed!"
-        }
+        // env.JOB_NAME, env.BUILD_NUMBER 는 젠킨스에서 제공하는 환경변수
+       failure {
+               echo "Build or test failed!"
+               emailext (
+                   subject: "Jenkins Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                   body: """Build failed.
+                   Check console output at ${env.BUILD_URL}""",
+                   to: "rmsghchl0@gmail.com"
+               )
+           }
 
-        success {
-            echo "Build and test succeeded!"
-        }
+           success {
+               echo "Build and test succeeded!"
+               emailext (
+                   subject: "Jenkins Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                   body: """Build succeeded!
+                   Check details at ${env.BUILD_URL}""",
+                   to: "rmsghchl0@gmail.com"
+               )
+           }
     }
 }
